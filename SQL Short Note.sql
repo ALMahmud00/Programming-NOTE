@@ -18,3 +18,24 @@ set @Encoded = (SELECT CAST(@MyString as varbinary(max)) FOR XML PATH(''), BINAR
 set @Decoded = (SELECT CAST( CAST(@Encoded as XML ).value('.','varbinary(max)') AS varchar(max))) 
 
 select @Encoded, @Decoded
+
+
+--===== Remove Duplicate
+  WITH cte AS (
+    SELECT 
+        strThanaName, isactive,
+        ROW_NUMBER() OVER (
+            PARTITION BY 
+                strThanaName 
+            ORDER BY 
+               strThanaName 
+        ) row_num
+     FROM 
+        iBOSDDD.dco.TblThana
+)
+select * FROM cte
+WHERE row_num > 1
+order by row_num;
+
+
+
