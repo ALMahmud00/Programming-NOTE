@@ -1,10 +1,10 @@
 ---=== PIVOT QUERY
 	DECLARE @dynamicColumnList NVARCHAR(MAX),@dynamicColumnListSelect NVARCHAR(MAX), @pivotQuery NVARCHAR(MAX)
 	
-	SELECT @dynamicColumnList = COALESCE(@dynamicColumnList + ',', '') + strItemName 
+	SELECT @dynamicColumnList = COALESCE(@dynamicColumnList + ', ', '') + '['+ strItemName +']'
 	FROM [AkijFoodDB].[dbo].[tblTransaction] GROUP BY strItemName
 
-	SELECT @dynamicColumnListSelect = COALESCE(@dynamicColumnListSelect + ',', '') + 'ISNULL('+ strItemName +',0)'
+	SELECT @dynamicColumnListSelect = COALESCE(@dynamicColumnListSelect + ',', '') + 'ISNULL(['+ strItemName +'],0) as ' + '['+ strItemName +']'
 	FROM [AkijFoodDB].[dbo].[tblTransaction] GROUP BY strItemName
 
 	SET @pivotQuery =	'select transactionDate,'+ @dynamicColumnListSelect+ ' from
